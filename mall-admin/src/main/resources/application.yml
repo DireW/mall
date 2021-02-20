@@ -46,6 +46,7 @@ secure:
       - /admin/info
       - /admin/logout
       - /minio/upload
+      - /wechat/login
 
 aliyun:
   oss:
@@ -65,3 +66,18 @@ minio:
   bucketName: mall #存储桶名称
   accessKey: minioadmin #访问的key
   secretKey: minioadmin #访问的秘钥
+
+# ssl设置
+# 此端口为HTTPS端口
+#server:
+#  port: 443
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: dw1025
+#    key-store-type: PKCS12
+#    key-alias: dw
+#myhttp-port: 8080
+
+wechat:
+  app-id: wx3f06883c9a1ec6a3
+  app-secret: d74d19328a02570de5c7b74b7220af05

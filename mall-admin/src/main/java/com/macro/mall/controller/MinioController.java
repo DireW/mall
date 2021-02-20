@@ -47,9 +47,9 @@ public class MinioController {
     public CommonResult upload(@RequestParam("file") MultipartFile file) {
         try {
             //创建一个MinIO的Java客户端
-            MinioClient minioClient =MinioClient.builder()
+            MinioClient minioClient = MinioClient.builder()
                     .endpoint(ENDPOINT)
-                    .credentials(ACCESS_KEY,SECRET_KEY)
+                    .credentials(ACCESS_KEY, SECRET_KEY)
                     .build();
             boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build());
             if (isExist) {
@@ -73,7 +73,8 @@ public class MinioController {
                     .bucket(BUCKET_NAME)
                     .object(objectName)
                     .contentType(file.getContentType())
-                    .stream(file.getInputStream(), file.getSize(), ObjectWriteArgs.MIN_MULTIPART_SIZE).build();
+                    .stream(file.getInputStream(), file.getSize(), ObjectWriteArgs.MIN_MULTIPART_SIZE)
+                    .build();
             minioClient.putObject(putObjectArgs);
             LOGGER.info("文件上传成功!");
             MinioUploadDto minioUploadDto = new MinioUploadDto();
@@ -88,11 +89,13 @@ public class MinioController {
     }
 
     private BucketPolicyConfigDto createBucketPolicyConfigDto(String bucketName) {
-        BucketPolicyConfigDto.Statement statement = BucketPolicyConfigDto.Statement.builder()
+        BucketPolicyConfigDto.Statement statement = BucketPolicyConfigDto.Statement
+                .builder()
                 .Effect("Allow")
                 .Principal("*")
                 .Action("s3:GetObject")
-                .Resource("arn:aws:s3:::"+bucketName+"/*.**").build();
+                .Resource("arn:aws:s3:::" + bucketName + "/*.**")
+                .build();
         return BucketPolicyConfigDto.builder()
                 .Version("2012-10-17")
                 .Statement(CollUtil.toList(statement))
@@ -106,7 +109,7 @@ public class MinioController {
         try {
             MinioClient minioClient = MinioClient.builder()
                     .endpoint(ENDPOINT)
-                    .credentials(ACCESS_KEY,SECRET_KEY)
+                    .credentials(ACCESS_KEY, SECRET_KEY)
                     .build();
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(BUCKET_NAME).object(objectName).build());
             return CommonResult.success(null);
