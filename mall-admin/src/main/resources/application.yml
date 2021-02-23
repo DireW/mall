@@ -47,6 +47,7 @@ secure:
       - /admin/logout
       - /minio/upload
       - /wechat/login
+      - /wechat/message/validate
 
 aliyun:
   oss:
@@ -80,4 +81,5 @@ minio:
 
 wechat:
   app-id: wx3f06883c9a1ec6a3
-  app-secret: xxx
+  app-secret: d74d19328a02570de5c7b74b7220af05
+  message-token: direW1025

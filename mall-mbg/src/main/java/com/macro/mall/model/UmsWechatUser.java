@@ -1,5 +1,6 @@
 package com.macro.mall.model;
 
+import com.macro.mall.enums.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
@@ -18,7 +19,7 @@ public class UmsWechatUser implements Serializable {
     @ApiModelProperty(value = "头像路径")
     private String avatarUrl;
 
-    private Integer gender;
+    private Gender gender;
 
     @ApiModelProperty(value = "城市")
     private String city;
@@ -71,11 +72,11 @@ public class UmsWechatUser implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public Integer getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 

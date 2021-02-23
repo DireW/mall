@@ -20,6 +20,8 @@ public interface UmsWechatUserMapper {
 
     UmsWechatUser selectByPrimaryKey(Long id);
 
+    UmsWechatUser findByOpenid(String openid);
+
     int updateByExampleSelective(@Param("record") UmsWechatUser record, @Param("example") UmsWechatUserExample example);
 
     int updateByExample(@Param("record") UmsWechatUser record, @Param("example") UmsWechatUserExample example);
