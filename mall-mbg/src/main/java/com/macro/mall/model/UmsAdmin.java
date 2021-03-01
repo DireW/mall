@@ -14,7 +14,7 @@ public class UmsAdmin implements Serializable {
     @ApiModelProperty(value = "头像")
     private String avatarUrl;
 
-    @ApiModelProperty(value = "姓名")
+    @ApiModelProperty(value = "昵称")
     private String realName;
 
     @ApiModelProperty(value = "身份证号")

@@ -12,14 +12,12 @@ import com.macro.mall.config.WechatConfig;
 import com.macro.mall.dto.wechat.WechatLoginRequest;
 import com.macro.mall.dto.wechat.WechatLoginResponse;
 import com.macro.mall.dto.wechat.WechatUserDTO;
-import com.macro.mall.mapper.UmsWechatUserMapper;
+import com.macro.mall.mapper.UmsAgencyWechatUserMapper;
 import com.macro.mall.model.UmsAdmin;
-import com.macro.mall.model.UmsAdminExample;
+import com.macro.mall.model.UmsAgencyWechatUser;
+import com.macro.mall.model.UmsAgencyWechatUserExample;
 import com.macro.mall.model.UmsResource;
-import com.macro.mall.model.UmsWechatUser;
-import com.macro.mall.model.UmsWechatUserExample;
 import com.macro.mall.security.util.JwtTokenUtil;
-import com.macro.mall.security.util.WechatUtil;
 import com.macro.mall.service.UmsAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +31,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -50,7 +46,7 @@ public class WechatAuthService {
     @Autowired
     private UmsAdminService umsAdminService;
     @Autowired
-    private UmsWechatUserMapper wechatUserMapper;
+    private UmsAgencyWechatUserMapper wechatUserMapper;
 
     public WechatLoginResponse loginByAccount(WechatLoginRequest loginRequest) {
         WechatLoginResponse loginResponse = new WechatLoginResponse();
@@ -77,25 +73,25 @@ public class WechatAuthService {
         String openid = sessionKeyAndOpenId.get("openid", String.class);
         // 获取当前用户信息，并判断openid是否一致
         UmsAdmin umsAdmin = umsAdminService.getAdminByUsername(loginRequest.getUsername());
-        UmsWechatUser dbWechatUserByUserId = findByUserId(umsAdmin.getId());
-        UmsWechatUser dbWechatUserByOpenid = findByOpenid(openid);
+        UmsAgencyWechatUser dbWechatUserByUserId = findByUserId(umsAdmin.getId());
+        UmsAgencyWechatUser dbWechatUserByOpenid = findByOpenid(openid);
         if (dbWechatUserByUserId != null) {
             if (!Objects.equals(dbWechatUserByUserId.getOpenid(), openid)) {
                 loginResponse.setUserInfo(convertLoginResponse(umsAdmin, null));
             }
         } else if (dbWechatUserByOpenid == null) {
             // 通过userId和openid都找不到微信记录，需要新增一个
-            UmsWechatUser umsWechatUser = insertWechatUser(umsAdmin.getId(), openid, loginRequest);
+            UmsAgencyWechatUser umsWechatUser = insertWechatUser(umsAdmin.getId(), openid, loginRequest);
             loginResponse.setUserInfo(convertLoginResponse(umsAdmin, umsWechatUser));
         }
         loginResponse.setToken(token);
         return loginResponse;
     }
 
-    private UmsWechatUser insertWechatUser(Long userId, String openid, WechatLoginRequest loginRequest) {
-        UmsWechatUser wechatUser = new UmsWechatUser();
+    private UmsAgencyWechatUser insertWechatUser(Long userId, String openid, WechatLoginRequest loginRequest) {
+        UmsAgencyWechatUser wechatUser = new UmsAgencyWechatUser();
         BeanUtil.copyProperties(loginRequest, wechatUser);
-        wechatUser.setUserId(userId);
+        wechatUser.setEmpId(userId);
         wechatUser.setOpenid(openid);
         int count = wechatUserMapper.insert(wechatUser);
         LOGGER.info("新增微信用户信息，wechatUser={}", wechatUser.toString());
@@ -115,7 +111,7 @@ public class WechatAuthService {
 
         String sessionKey = sessionKeyAndOpenId.get("session_key", String.class);
         String openId = sessionKeyAndOpenId.get("openid", String.class);
-        UmsWechatUser umsWechatUser = findByOpenid(openId);
+        UmsAgencyWechatUser umsWechatUser = findByOpenid(openId);
         // 将sessionKey和openid都保存到session中
         if (umsWechatUser == null) {
             ServletRequestAttributes servletRequest = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -126,7 +122,7 @@ public class WechatAuthService {
             return null;
         }
         // openid有绑定的对应账号信息，生成一个token返回到前台
-        Long userId = umsWechatUser.getUserId();
+        Long userId = umsWechatUser.getEmpId();
         UmsAdmin umsAdmin = umsAdminService.getItem(userId);
         List<UmsResource> resourceList = umsAdminService.getResourceList(userId);
         UserDetails userDetails = new AdminUserDetails(umsAdmin, resourceList);
@@ -142,7 +138,7 @@ public class WechatAuthService {
         return wechatLoginResponse;
     }
 
-    private WechatUserDTO convertLoginResponse(UmsAdmin umsAdmin, UmsWechatUser wechatUser) {
+    private WechatUserDTO convertLoginResponse(UmsAdmin umsAdmin, UmsAgencyWechatUser wechatUser) {
         WechatUserDTO wechatUserDTO = new WechatUserDTO();
         if (wechatUser != null) {
             BeanUtil.copyProperties(wechatUser, wechatUserDTO);
@@ -154,20 +150,20 @@ public class WechatAuthService {
         return wechatUserDTO;
     }
 
-    private UmsWechatUser findByUserId(Long userId) {
-        UmsWechatUserExample umsWechatUserExample = new UmsWechatUserExample();
-        umsWechatUserExample.createCriteria().andUserIdEqualTo(userId);
-        List<UmsWechatUser> wechatUserList = wechatUserMapper.selectByExample(umsWechatUserExample);
+    private UmsAgencyWechatUser findByUserId(Long userId) {
+        UmsAgencyWechatUserExample umsWechatUserExample = new UmsAgencyWechatUserExample();
+        umsWechatUserExample.createCriteria().andEmpIdEqualTo(userId);
+        List<UmsAgencyWechatUser> wechatUserList = wechatUserMapper.selectByExample(umsWechatUserExample);
         if (CollectionUtil.isEmpty(wechatUserList)) {
             return null;
         }
         return wechatUserList.get(0);
     }
 
-    private UmsWechatUser findByOpenid(String openid) {
-        UmsWechatUserExample umsWechatUserExample = new UmsWechatUserExample();
+    private UmsAgencyWechatUser findByOpenid(String openid) {
+        UmsAgencyWechatUserExample umsWechatUserExample = new UmsAgencyWechatUserExample();
         umsWechatUserExample.createCriteria().andOpenidEqualTo(openid);
-        List<UmsWechatUser> wechatUserList = wechatUserMapper.selectByExample(umsWechatUserExample);
+        List<UmsAgencyWechatUser> wechatUserList = wechatUserMapper.selectByExample(umsWechatUserExample);
         if (CollectionUtil.isEmpty(wechatUserList)) {
             return null;
         }

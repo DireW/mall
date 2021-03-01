@@ -54,7 +54,8 @@ public class CmsSubjectExample {
     }
 
     protected Criteria createCriteriaInternal() {
-        return new Criteria();
+        Criteria criteria = new Criteria();
+        return criteria;
     }
 
     public void clear() {
