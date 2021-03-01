@@ -1,6 +1,5 @@
 package com.macro.mall.model;
 
-import com.macro.mall.enums.Gender;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
@@ -8,7 +7,7 @@ public class UmsWechatUser implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "用户id")
-    private Long memberId;
+    private Long userId;
 
     @ApiModelProperty(value = "微信openid")
     private String openid;
@@ -19,7 +18,7 @@ public class UmsWechatUser implements Serializable {
     @ApiModelProperty(value = "头像路径")
     private String avatarUrl;
 
-    private Gender gender;
+    private Integer gender;
 
     @ApiModelProperty(value = "城市")
     private String city;
@@ -40,12 +39,12 @@ public class UmsWechatUser implements Serializable {
         this.id = id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getOpenid() {
@@ -72,11 +71,11 @@ public class UmsWechatUser implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
-    public Gender getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
@@ -111,7 +110,7 @@ public class UmsWechatUser implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", memberId=").append(memberId);
+        sb.append(", userId=").append(userId);
         sb.append(", openid=").append(openid);
         sb.append(", nickName=").append(nickName);
         sb.append(", avatarUrl=").append(avatarUrl);

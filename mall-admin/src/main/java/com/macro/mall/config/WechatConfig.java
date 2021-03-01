@@ -8,7 +8,8 @@ public class WechatConfig {
 
     public static final String AUTH_URL_FMT = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
 
-    public static final String WECHAT_REDIS_KEY = "wechatSessionKeyOpenId";
+    public static final String WECHAT_SESSION_KEY = "wechatSessionKey";
+    public static final String WECHAT_OPENID = "wechatOpenId";
 
     @Value("${wechat.app-id}")
     public String WECHAT_APP_ID;

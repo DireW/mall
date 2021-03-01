@@ -7,18 +7,27 @@ import javax.validation.constraints.NotNull;
 
 @ApiModel
 public class WechatLoginRequest {
-
     @NotNull(message = "code不能为空")
     @ApiModelProperty(value = "微信code", required = true)
     private String code;
-    @ApiModelProperty(value = "用户非敏感字段")
-    private String rawData;
-    @ApiModelProperty(value = "签名")
-    private String signature;
-    @ApiModelProperty(value = "用户敏感字段")
-    private String encryptedData;
-    @ApiModelProperty(value = "解密向量")
-    private String iv;
+    @ApiModelProperty(value = "头像信息")
+    private String avatarUrl;
+    @ApiModelProperty(value = "城市")
+    private String city;
+    @ApiModelProperty(value = "国家")
+    private String country;
+    @ApiModelProperty(value = "性别")
+    private Integer gender;
+    @ApiModelProperty(value = "微信昵称")
+    private String nickName;
+    @ApiModelProperty(value = "省份")
+    private String province;
+    @ApiModelProperty(value = "语言")
+    private String language;
+    @ApiModelProperty(value = "系统用户名")
+    private String username;
+    @ApiModelProperty(value = "系统密码")
+    private String password;
 
     public String getCode() {
         return code;
@@ -28,35 +37,75 @@ public class WechatLoginRequest {
         this.code = code;
     }
 
-    public String getRawData() {
-        return rawData;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setRawData(String rawData) {
-        this.rawData = rawData;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
-    public String getSignature() {
-        return signature;
+    public String getCity() {
+        return city;
     }
 
-    public void setSignature(String signature) {
-        this.signature = signature;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getEncryptedData() {
-        return encryptedData;
+    public String getCountry() {
+        return country;
     }
 
-    public void setEncryptedData(String encryptedData) {
-        this.encryptedData = encryptedData;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public String getIv() {
-        return iv;
+    public Integer getGender() {
+        return gender;
     }
 
-    public void setIv(String iv) {
-        this.iv = iv;
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

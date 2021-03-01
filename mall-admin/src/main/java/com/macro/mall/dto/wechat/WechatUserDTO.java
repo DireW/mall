@@ -2,11 +2,9 @@ package com.macro.mall.dto.wechat;
 
 public class WechatUserDTO {
 
-    private Integer id;
+    private Long userId;
 
-    private String token;
-
-    private String nickname;
+    private String nickName;
 
     private String avatarUrl;
 
@@ -20,36 +18,20 @@ public class WechatUserDTO {
 
     private String mobile;
 
-    private String openId;
-
-    private String unionId;
-
-    private String createdAt;
-
-    private String updatedAt;
-
-    public Integer getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getToken() {
-        return token;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getAvatarUrl() {
@@ -98,37 +80,5 @@ public class WechatUserDTO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
-    public String getUnionId() {
-        return unionId;
-    }
-
-    public void setUnionId(String unionId) {
-        this.unionId = unionId;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
