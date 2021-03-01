@@ -161,7 +161,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         UmsAdminExample.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(keyword)) {
             criteria.andUsernameLike("%" + keyword + "%");
-            example.or(example.createCriteria().andNickNameLike("%" + keyword + "%"));
+            example.or(example.createCriteria().andRealNameLike("%" + keyword + "%"));
         }
         return adminMapper.selectByExample(example);
     }

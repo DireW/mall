@@ -31,9 +31,14 @@ public class WechatAuthController {
         System.out.println(url);
     }
 
-    @PostMapping("/login")
-    public WechatLoginResponse login(@RequestBody WechatLoginRequest request) {
-        return wechatLoginService.login(request);
+    @PostMapping("/login-account")
+    public WechatLoginResponse loginByAccount(@RequestBody WechatLoginRequest request) {
+        return wechatLoginService.loginByAccount(request);
+    }
+
+    @PostMapping("/login-wechat")
+    public WechatLoginResponse loginWithWechat(@RequestBody WechatLoginRequest request) {
+        return wechatLoginService.loginWithWechat(request);
     }
 
     /**

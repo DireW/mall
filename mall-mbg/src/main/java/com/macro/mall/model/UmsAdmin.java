@@ -12,13 +12,22 @@ public class UmsAdmin implements Serializable {
     private String password;
 
     @ApiModelProperty(value = "头像")
-    private String icon;
+    private String avatarUrl;
+
+    @ApiModelProperty(value = "姓名")
+    private String realName;
+
+    @ApiModelProperty(value = "身份证号")
+    private String idCard;
+
+    @ApiModelProperty(value = "性别：0->未知；1->男；2->女")
+    private Integer gender;
+
+    @ApiModelProperty(value = "手机号码")
+    private String phoneNumber;
 
     @ApiModelProperty(value = "邮箱")
     private String email;
-
-    @ApiModelProperty(value = "昵称")
-    private String nickName;
 
     @ApiModelProperty(value = "备注信息")
     private String note;
@@ -58,12 +67,44 @@ public class UmsAdmin implements Serializable {
         this.password = password;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -72,14 +113,6 @@ public class UmsAdmin implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
     }
 
     public String getNote() {
@@ -123,9 +156,12 @@ public class UmsAdmin implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
-        sb.append(", icon=").append(icon);
+        sb.append(", avatarUrl=").append(avatarUrl);
+        sb.append(", realName=").append(realName);
+        sb.append(", idCard=").append(idCard);
+        sb.append(", gender=").append(gender);
+        sb.append(", phoneNumber=").append(phoneNumber);
         sb.append(", email=").append(email);
-        sb.append(", nickName=").append(nickName);
         sb.append(", note=").append(note);
         sb.append(", createTime=").append(createTime);
         sb.append(", loginTime=").append(loginTime);

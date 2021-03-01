@@ -14,6 +14,7 @@ import com.macro.mall.dto.wechat.WechatLoginResponse;
 import com.macro.mall.dto.wechat.WechatUserDTO;
 import com.macro.mall.mapper.UmsWechatUserMapper;
 import com.macro.mall.model.UmsAdmin;
+import com.macro.mall.model.UmsAdminExample;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.model.UmsWechatUser;
 import com.macro.mall.model.UmsWechatUserExample;
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class WechatAuthService {
@@ -50,50 +52,56 @@ public class WechatAuthService {
     @Autowired
     private UmsWechatUserMapper wechatUserMapper;
 
-    public WechatLoginResponse login(WechatLoginRequest loginRequest) {
+    public WechatLoginResponse loginByAccount(WechatLoginRequest loginRequest) {
         WechatLoginResponse loginResponse = new WechatLoginResponse();
         // 检查账号密码
         String token = umsAdminService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (token == null) {
             throw new ApiException("用户名或密码错误");
         }
-        UmsWechatUser umsWechatUser = null;
-        if (loginRequest.getCode() != null) {
-            umsWechatUser = new UmsWechatUser();
-            JSONObject sessionKeyAndOpenId = getSessionKeyAndOpenId(loginRequest.getCode());
-            LOGGER.info("already get sessionKey and openId, wechatLoginRequest={}", JSONUtil.toJsonStr(sessionKeyAndOpenId));
-            String openid = sessionKeyAndOpenId.get("openid", String.class);
-            umsWechatUser.setOpenid(openid);
-            BeanUtil.copyProperties(loginRequest, umsWechatUser);
-            UmsWechatUser dbWechatUser = findByOpenid(openid);
-            if (dbWechatUser == null) {
-                wechatUserMapper.insert(umsWechatUser);
-            } else {
-                umsWechatUser.setId(dbWechatUser.getId());
-                wechatUserMapper.updateByPrimaryKey(umsWechatUser);
-            }
-        }
         loginResponse.setToken(tokenHead + token);
-        loginResponse.setUserInfo(convertLoginResponse(umsAdminService.getAdminByUsername(loginRequest.getUsername()), umsWechatUser));
+        loginResponse.setUserInfo(convertLoginResponse(umsAdminService.getAdminByUsername(loginRequest.getUsername()), null));
         return loginResponse;
     }
 
-    public Map<String, Object> getUserInfoMap(WechatLoginRequest wechatLoginRequest) {
-        Map<String, Object> userInfoMap = new HashMap<>();
-        JSONObject sessionKeyAndOpenId = getSessionKeyAndOpenId(wechatLoginRequest.getCode());
-        LOGGER.info("already get sessionKey and openId, wechatLoginRequest={}", JSONUtil.toJsonStr(sessionKeyAndOpenId));
-        String sessionKey = sessionKeyAndOpenId.get("session_key", String.class);
-        String openId = sessionKeyAndOpenId.get("openid", String.class);
-
-
-
-        UmsWechatUser umsWechatUser = findByOpenid(openId);
-        if (umsWechatUser == null) {
-            return null;
+    public WechatLoginResponse loginWithWechat(WechatLoginRequest loginRequest) {
+        WechatLoginResponse loginResponse = new WechatLoginResponse();
+        // 检查账号密码
+        String token = umsAdminService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        if (token == null) {
+            throw new ApiException("用户名或密码错误");
         }
-
-        return userInfoMap;
+        // 获取当前登录人的openid
+        JSONObject sessionKeyAndOpenId = getSessionKeyAndOpenId(loginRequest.getCode());
+        LOGGER.info("already get sessionKey and openId, wechatLoginRequest={}", JSONUtil.toJsonStr(sessionKeyAndOpenId));
+        String openid = sessionKeyAndOpenId.get("openid", String.class);
+        // 获取当前用户信息，并判断openid是否一致
+        UmsAdmin umsAdmin = umsAdminService.getAdminByUsername(loginRequest.getUsername());
+        UmsWechatUser dbWechatUserByUserId = findByUserId(umsAdmin.getId());
+        UmsWechatUser dbWechatUserByOpenid = findByOpenid(openid);
+        if (dbWechatUserByUserId != null) {
+            if (!Objects.equals(dbWechatUserByUserId.getOpenid(), openid)) {
+                loginResponse.setUserInfo(convertLoginResponse(umsAdmin, null));
+            }
+        } else if (dbWechatUserByOpenid == null) {
+            // 通过userId和openid都找不到微信记录，需要新增一个
+            UmsWechatUser umsWechatUser = insertWechatUser(umsAdmin.getId(), openid, loginRequest);
+            loginResponse.setUserInfo(convertLoginResponse(umsAdmin, umsWechatUser));
+        }
+        loginResponse.setToken(token);
+        return loginResponse;
     }
+
+    private UmsWechatUser insertWechatUser(Long userId, String openid, WechatLoginRequest loginRequest) {
+        UmsWechatUser wechatUser = new UmsWechatUser();
+        BeanUtil.copyProperties(loginRequest, wechatUser);
+        wechatUser.setUserId(userId);
+        wechatUser.setOpenid(openid);
+        int count = wechatUserMapper.insert(wechatUser);
+        LOGGER.info("新增微信用户信息，wechatUser={}", wechatUser.toString());
+        return wechatUser;
+    }
+
 
     /**
      * 判断当前openid是否绑定公司员工
@@ -140,10 +148,20 @@ public class WechatAuthService {
             BeanUtil.copyProperties(wechatUser, wechatUserDTO);
         } else {
             wechatUserDTO.setUserId(umsAdmin.getId());
-            wechatUserDTO.setAvatarUrl(umsAdmin.getIcon());
-            wechatUserDTO.setNickName(umsAdmin.getNickName());
+            wechatUserDTO.setAvatarUrl(umsAdmin.getAvatarUrl());
+            wechatUserDTO.setNickName(umsAdmin.getRealName());
         }
         return wechatUserDTO;
+    }
+
+    private UmsWechatUser findByUserId(Long userId) {
+        UmsWechatUserExample umsWechatUserExample = new UmsWechatUserExample();
+        umsWechatUserExample.createCriteria().andUserIdEqualTo(userId);
+        List<UmsWechatUser> wechatUserList = wechatUserMapper.selectByExample(umsWechatUserExample);
+        if (CollectionUtil.isEmpty(wechatUserList)) {
+            return null;
+        }
+        return wechatUserList.get(0);
     }
 
     private UmsWechatUser findByOpenid(String openid) {
