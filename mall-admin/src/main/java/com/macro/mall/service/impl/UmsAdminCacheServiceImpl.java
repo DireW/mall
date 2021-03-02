@@ -9,7 +9,7 @@ import com.macro.mall.model.UmsAdminRoleRelation;
 import com.macro.mall.model.UmsAdminRoleRelationExample;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.service.UmsAdminCacheService;
-import com.macro.mall.service.UmsAdminService;
+import com.macro.mall.service.ums.UmsAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

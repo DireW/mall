@@ -1,4 +1,4 @@
-package com.macro.mall.controller;
+package com.macro.mall.controller.ums;
 
 import cn.hutool.core.collection.CollUtil;
 import com.macro.mall.common.api.CommonPage;
@@ -6,9 +6,10 @@ import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.UmsAdminLoginParam;
 import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.dto.UpdateAdminPasswordParam;
+import com.macro.mall.dto.ums.UmsAdminDTO;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsRole;
-import com.macro.mall.service.UmsAdminService;
+import com.macro.mall.service.ums.UmsAdminService;
 import com.macro.mall.service.UmsRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -118,6 +119,12 @@ public class UmsAdminController {
                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<UmsAdmin> adminList = adminService.list(keyword, pageSize, pageNum);
         return CommonResult.success(CommonPage.restPage(adminList));
+    }
+
+    @ApiOperation("获取所有账号的名称和用户名")
+    @GetMapping("/employee/all")
+    public CommonResult<List<UmsAdmin>> findAll() {
+        return CommonResult.success(adminService.findAll());
     }
 
     @ApiOperation("获取指定用户信息")

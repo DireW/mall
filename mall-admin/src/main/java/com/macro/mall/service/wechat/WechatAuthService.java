@@ -18,7 +18,7 @@ import com.macro.mall.model.UmsAgencyWechatUser;
 import com.macro.mall.model.UmsAgencyWechatUserExample;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.security.util.JwtTokenUtil;
-import com.macro.mall.service.UmsAdminService;
+import com.macro.mall.service.ums.UmsAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

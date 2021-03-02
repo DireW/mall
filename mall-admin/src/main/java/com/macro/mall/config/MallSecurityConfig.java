@@ -3,7 +3,7 @@ package com.macro.mall.config;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.security.component.DynamicSecurityService;
 import com.macro.mall.security.config.SecurityConfig;
-import com.macro.mall.service.UmsAdminService;
+import com.macro.mall.service.ums.UmsAdminService;
 import com.macro.mall.service.UmsResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,8 @@
-package com.macro.mall.service;
+package com.macro.mall.service.ums;
 
 import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.dto.UpdateAdminPasswordParam;
+import com.macro.mall.dto.ums.UmsAdminDTO;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.model.UmsRole;
@@ -48,6 +49,8 @@ public interface UmsAdminService {
      * 根据用户名或昵称分页查询用户
      */
     List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
+
+    List<UmsAdmin> findAll();
 
     /**
      * 修改指定用户信息

@@ -1,4 +1,4 @@
-package com.macro.mall.service.impl;
+package com.macro.mall.service.ums.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -8,13 +8,14 @@ import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.dao.UmsAdminRoleRelationDao;
 import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.dto.UpdateAdminPasswordParam;
+import com.macro.mall.dto.ums.UmsAdminDTO;
 import com.macro.mall.mapper.UmsAdminLoginLogMapper;
 import com.macro.mall.mapper.UmsAdminMapper;
 import com.macro.mall.mapper.UmsAdminRoleRelationMapper;
 import com.macro.mall.model.*;
 import com.macro.mall.security.util.JwtTokenUtil;
 import com.macro.mall.service.UmsAdminCacheService;
-import com.macro.mall.service.UmsAdminService;
+import com.macro.mall.service.ums.UmsAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * UmsAdminService实现类
@@ -164,6 +166,23 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             example.or(example.createCriteria().andRealNameLike("%" + keyword + "%"));
         }
         return adminMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<UmsAdmin> findAll() {
+        UmsAdminExample umsAdminExample = new UmsAdminExample();
+        umsAdminExample.createCriteria().andStatusEqualTo(1);
+        // 只封装必要的字段到前台
+        return adminMapper.selectByExample(umsAdminExample)
+                .stream()
+                .map(umsAdmin -> {
+                    UmsAdmin rlt = new UmsAdmin();
+                    rlt.setId(umsAdmin.getId());
+                    rlt.setUsername(umsAdmin.getUsername());
+                    rlt.setRealName(umsAdmin.getRealName());
+                    return rlt;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

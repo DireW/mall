@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.dao.ums.AgencyDepartmentDAO">
+
+    <select id="getListByParams" resultType="com.macro.mall.dto.ums.AgencyDepartmentDTO">
+        SELECT
+            ad.id,
+            ad.NAME,
+            ad.principal_id,
+            a.real_name as principal_name,
+            ad.area_id,
+            aa.name as area_name
+        FROM
+            ums_agency_department ad
+        LEFT JOIN
+        ums_admin a ON ad.principal_id = a.id
+        LEFT JOIN
+        ums_agency_area aa ON ad.area_id = aa.id
+        WHERE
+            ad.deleted = 0
+        <if test="queryParam.areaId != null">
+            AND ad.area_id = #{queryParam.areaId}
+        </if>
+    </select>
+
+</mapper>

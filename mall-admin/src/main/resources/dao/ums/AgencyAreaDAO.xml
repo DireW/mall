@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.dao.ums.AgencyAreaDAO">
+
+    <select id="getList" resultType="com.macro.mall.dto.ums.AgencyAreaDTO">
+        SELECT
+            t.id,
+            t.NAME,
+            t.principal_id,
+            a.real_name as principal_name
+        FROM
+            ums_agency_area t
+        LEFT JOIN
+        ums_admin a ON t.principal_id = a.id
+        WHERE
+            t.deleted = 0
+    </select>
+
+</mapper>
