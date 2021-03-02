@@ -6,8 +6,8 @@
         SELECT
             t.id,
             t.NAME,
-            t.principal_id,
-            a.real_name as principal_name
+            t.principal_id as principalId,
+            a.real_name as principalName
         FROM
             ums_agency_area t
         LEFT JOIN

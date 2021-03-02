@@ -6,10 +6,10 @@
         SELECT
             ad.id,
             ad.NAME,
-            ad.principal_id,
-            a.real_name as principal_name,
-            ad.area_id,
-            aa.name as area_name
+            ad.principal_id as principalId,
+            a.real_name as principalName,
+            ad.area_id as areaId,
+            aa.name as areaName
         FROM
             ums_agency_department ad
         LEFT JOIN

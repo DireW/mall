@@ -26,9 +26,9 @@ public class AgencyDepartmentController {
     AgencyDepartmentService agencyDepartmentService;
 
     @ApiOperation(value = "根据查询条件获取门店信息")
-    @GetMapping("/list")
-    public List<AgencyDepartmentDTO> list(@RequestBody AgencyDepartmentDTO agencyDepartmentDTO) {
-        return agencyDepartmentService.findByParams(agencyDepartmentDTO);
+    @PostMapping("/list")
+    public CommonResult<List<AgencyDepartmentDTO>> list(@RequestBody UmsAgencyDepartment agencyDepartment) {
+        return CommonResult.success(agencyDepartmentService.findByParams(agencyDepartment));
     }
 
     @ApiOperation(value = "保存或者更新区域信息")
