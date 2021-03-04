@@ -10,6 +10,7 @@
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
     <result column="gender" jdbcType="INTEGER" property="gender" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="department_id" jdbcType="BIGINT" property="departmentId" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, avatar_url, real_name, id_card, gender, phone_number, email, 
-    note, create_time, login_time, status
+    id, username, password, avatar_url, real_name, id_card, gender, phone_number, department_id, 
+    email, note, create_time, login_time, status
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.UmsAdminExample" resultMap="BaseResultMap">
     select
@@ -114,14 +115,14 @@
     </selectKey>
     insert into ums_admin (username, password, avatar_url, 
       real_name, id_card, gender, 
-      phone_number, email, note, 
-      create_time, login_time, status
-      )
+      phone_number, department_id, email, 
+      note, create_time, login_time, 
+      status)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
       #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{loginTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
-      )
+      #{phoneNumber,jdbcType=VARCHAR}, #{departmentId,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{loginTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.macro.mall.model.UmsAdmin">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -149,6 +150,9 @@
       </if>
       <if test="phoneNumber != null">
         phone_number,
+      </if>
+      <if test="departmentId != null">
+        department_id,
       </if>
       <if test="email != null">
         email,
@@ -187,6 +191,9 @@
       </if>
       <if test="phoneNumber != null">
         #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=BIGINT},
       </if>
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
@@ -238,6 +245,9 @@
       <if test="record.phoneNumber != null">
         phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
       </if>
+      <if test="record.departmentId != null">
+        department_id = #{record.departmentId,jdbcType=BIGINT},
+      </if>
       <if test="record.email != null">
         email = #{record.email,jdbcType=VARCHAR},
       </if>
@@ -268,6 +278,7 @@
       id_card = #{record.idCard,jdbcType=VARCHAR},
       gender = #{record.gender,jdbcType=INTEGER},
       phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=BIGINT},
       email = #{record.email,jdbcType=VARCHAR},
       note = #{record.note,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -301,6 +312,9 @@
       <if test="phoneNumber != null">
         phone_number = #{phoneNumber,jdbcType=VARCHAR},
       </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=BIGINT},
+      </if>
       <if test="email != null">
         email = #{email,jdbcType=VARCHAR},
       </if>
@@ -328,6 +342,7 @@
       id_card = #{idCard,jdbcType=VARCHAR},
       gender = #{gender,jdbcType=INTEGER},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=BIGINT},
       email = #{email,jdbcType=VARCHAR},
       note = #{note,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

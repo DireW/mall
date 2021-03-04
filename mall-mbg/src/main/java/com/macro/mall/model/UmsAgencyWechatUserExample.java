@@ -164,63 +164,63 @@ public class UmsAgencyWechatUserExample {
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdIsNull() {
-            addCriterion("emp_id is null");
+        public Criteria andUserIdIsNull() {
+            addCriterion("user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdIsNotNull() {
-            addCriterion("emp_id is not null");
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdEqualTo(Long value) {
-            addCriterion("emp_id =", value, "empId");
+        public Criteria andUserIdEqualTo(Long value) {
+            addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdNotEqualTo(Long value) {
-            addCriterion("emp_id <>", value, "empId");
+        public Criteria andUserIdNotEqualTo(Long value) {
+            addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdGreaterThan(Long value) {
-            addCriterion("emp_id >", value, "empId");
+        public Criteria andUserIdGreaterThan(Long value) {
+            addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("emp_id >=", value, "empId");
+        public Criteria andUserIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdLessThan(Long value) {
-            addCriterion("emp_id <", value, "empId");
+        public Criteria andUserIdLessThan(Long value) {
+            addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdLessThanOrEqualTo(Long value) {
-            addCriterion("emp_id <=", value, "empId");
+        public Criteria andUserIdLessThanOrEqualTo(Long value) {
+            addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdIn(List<Long> values) {
-            addCriterion("emp_id in", values, "empId");
+        public Criteria andUserIdIn(List<Long> values) {
+            addCriterion("user_id in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdNotIn(List<Long> values) {
-            addCriterion("emp_id not in", values, "empId");
+        public Criteria andUserIdNotIn(List<Long> values) {
+            addCriterion("user_id not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdBetween(Long value1, Long value2) {
-            addCriterion("emp_id between", value1, value2, "empId");
+        public Criteria andUserIdBetween(Long value1, Long value2) {
+            addCriterion("user_id between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andEmpIdNotBetween(Long value1, Long value2) {
-            addCriterion("emp_id not between", value1, value2, "empId");
+        public Criteria andUserIdNotBetween(Long value1, Long value2) {
+            addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
 

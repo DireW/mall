@@ -46,7 +46,8 @@ secure:
       - /admin/info
       - /admin/logout
       - /minio/upload
-      - /wechat/auth/login
+      - /wechat/auth/login-wechat
+      - /wechat/auth/login-account
       - /wechat/auth/login-code
       - /wechat/message/validate
 

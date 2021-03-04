@@ -24,7 +24,7 @@ public interface UmsAdminService {
     /**
      * 注册功能
      */
-    UmsAdmin register(UmsAdminParam umsAdminParam);
+    UmsAdmin register(UmsAdmin umsAdmin);
 
     /**
      * 登录功能
@@ -49,6 +49,8 @@ public interface UmsAdminService {
      * 根据用户名或昵称分页查询用户
      */
     List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
+
+    List<UmsAdminDTO> findPage(Integer pageNum, Integer pageSize, UmsAdminDTO umsAdminDTO);
 
     List<UmsAdmin> findAll();
 

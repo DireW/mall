@@ -1,5 +1,6 @@
 package com.macro.mall.controller.wechat;
 
+import cn.hutool.core.codec.Base64;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.wechat.WechatLoginRequest;
 import com.macro.mall.dto.wechat.WechatLoginResponse;
@@ -26,18 +27,13 @@ public class WechatAuthController {
     @Autowired
     WechatAuthService wechatLoginService;
 
-    public static void main(String[] args) {
-        String url = String.format("{name=%s}", "abc");
-        System.out.println(url);
-    }
-
     @PostMapping("/login-account")
-    public WechatLoginResponse loginByAccount(@RequestBody WechatLoginRequest request) {
+    public CommonResult<WechatLoginResponse> loginByAccount(@RequestBody WechatLoginRequest request) {
         return wechatLoginService.loginByAccount(request);
     }
 
     @PostMapping("/login-wechat")
-    public WechatLoginResponse loginWithWechat(@RequestBody WechatLoginRequest request) {
+    public CommonResult<WechatLoginResponse> loginWithWechat(@RequestBody WechatLoginRequest request) {
         return wechatLoginService.loginWithWechat(request);
     }
 
@@ -50,9 +46,14 @@ public class WechatAuthController {
     public CommonResult<WechatLoginResponse> loginByOpenid(@RequestParam("code") String code) {
         WechatLoginResponse loginResponse = wechatLoginService.loginByOpenid(code);
         if (loginResponse == null) {
-            return CommonResult.failed();
+            return CommonResult.failed("还未绑定账号");
         }
         return CommonResult.success(loginResponse);
+    }
+
+    @GetMapping("/logout")
+    public CommonResult logout() {
+        return null;
     }
 
 }

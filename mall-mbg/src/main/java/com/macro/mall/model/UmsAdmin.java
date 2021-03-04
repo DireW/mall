@@ -26,6 +26,9 @@ public class UmsAdmin implements Serializable {
     @ApiModelProperty(value = "手机号码")
     private String phoneNumber;
 
+    @ApiModelProperty(value = "门店id")
+    private Long departmentId;
+
     @ApiModelProperty(value = "邮箱")
     private String email;
 
@@ -107,6 +110,14 @@ public class UmsAdmin implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -161,6 +172,7 @@ public class UmsAdmin implements Serializable {
         sb.append(", idCard=").append(idCard);
         sb.append(", gender=").append(gender);
         sb.append(", phoneNumber=").append(phoneNumber);
+        sb.append(", departmentId=").append(departmentId);
         sb.append(", email=").append(email);
         sb.append(", note=").append(note);
         sb.append(", createTime=").append(createTime);

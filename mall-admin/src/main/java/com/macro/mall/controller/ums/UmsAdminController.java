@@ -46,7 +46,7 @@ public class UmsAdminController {
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult<UmsAdmin> register(@Validated @RequestBody UmsAdminParam umsAdminParam) {
+    public CommonResult<UmsAdmin> register(@Validated @RequestBody UmsAdmin umsAdminParam) {
         UmsAdmin umsAdmin = adminService.register(umsAdminParam);
         if (umsAdmin == null) {
             return CommonResult.failed();
@@ -119,6 +119,14 @@ public class UmsAdminController {
                                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<UmsAdmin> adminList = adminService.list(keyword, pageSize, pageNum);
         return CommonResult.success(CommonPage.restPage(adminList));
+    }
+
+    @ApiOperation("根据用户名或姓名分页获取用户列表")
+    @PostMapping("/page/{pageNum}/{pageSize}")
+    @ResponseBody
+    public CommonResult<CommonPage<UmsAdminDTO>> listByPage(@PathVariable Integer pageNum, @PathVariable Integer pageSize, @RequestBody UmsAdminDTO umsAdminDTO) {
+        List<UmsAdminDTO> page = adminService.findPage(pageNum, pageSize, umsAdminDTO);
+        return CommonResult.success(CommonPage.restPage(page));
     }
 
     @ApiOperation("获取所有账号的名称和用户名")

@@ -1,12 +1,13 @@
 package com.macro.mall.service.wechat;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.macro.mall.bo.AdminUserDetails;
-import com.macro.mall.common.exception.ApiException;
+import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.config.WechatConfig;
 import com.macro.mall.dto.wechat.WechatLoginRequest;
@@ -27,10 +28,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,36 +47,42 @@ public class WechatAuthService {
     @Autowired
     private UmsAgencyWechatUserMapper wechatUserMapper;
 
-    public WechatLoginResponse loginByAccount(WechatLoginRequest loginRequest) {
+    public CommonResult<WechatLoginResponse> loginByAccount(WechatLoginRequest loginRequest) {
         WechatLoginResponse loginResponse = new WechatLoginResponse();
         // 检查账号密码
         String token = umsAdminService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (token == null) {
-            throw new ApiException("用户名或密码错误");
+            LOGGER.info("登录用户名【{}】，账号或密码错误", loginRequest.getUsername());
+            return CommonResult.failed("账号或密码错误");
         }
         loginResponse.setToken(tokenHead + token);
         loginResponse.setUserInfo(convertLoginResponse(umsAdminService.getAdminByUsername(loginRequest.getUsername()), null));
-        return loginResponse;
+        return CommonResult.success(loginResponse);
     }
 
-    public WechatLoginResponse loginWithWechat(WechatLoginRequest loginRequest) {
+    public CommonResult<WechatLoginResponse> loginWithWechat(WechatLoginRequest loginRequest) {
         WechatLoginResponse loginResponse = new WechatLoginResponse();
         // 检查账号密码
         String token = umsAdminService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (token == null) {
-            throw new ApiException("用户名或密码错误");
+            LOGGER.info("登录用户名【{}】，账号或密码错误", loginRequest.getUsername());
+            return CommonResult.failed("账号或密码错误");
         }
         // 获取当前登录人的openid
         JSONObject sessionKeyAndOpenId = getSessionKeyAndOpenId(loginRequest.getCode());
-        LOGGER.info("already get sessionKey and openId, wechatLoginRequest={}", JSONUtil.toJsonStr(sessionKeyAndOpenId));
+        LOGGER.info("获取到sessionKey和Openid：{}", JSONUtil.toJsonStr(sessionKeyAndOpenId));
         String openid = sessionKeyAndOpenId.get("openid", String.class);
         // 获取当前用户信息，并判断openid是否一致
         UmsAdmin umsAdmin = umsAdminService.getAdminByUsername(loginRequest.getUsername());
         UmsAgencyWechatUser dbWechatUserByUserId = findByUserId(umsAdmin.getId());
         UmsAgencyWechatUser dbWechatUserByOpenid = findByOpenid(openid);
         if (dbWechatUserByUserId != null) {
-            if (!Objects.equals(dbWechatUserByUserId.getOpenid(), openid)) {
-                loginResponse.setUserInfo(convertLoginResponse(umsAdmin, null));
+            if (Objects.equals(dbWechatUserByUserId.getOpenid(), openid)) {
+                LOGGER.info("登录用户名【{}】，已绑定openid【{}】，返回对应信息", loginRequest.getUsername(), openid);
+                loginResponse.setUserInfo(convertLoginResponse(umsAdmin, dbWechatUserByOpenid));
+            } else {
+                LOGGER.info("登录用户名【{}】，已绑定openid【{}】，尝试绑定openid【{}】失败", loginRequest.getUsername(), dbWechatUserByUserId.getOpenid(), openid);
+                return CommonResult.failed("该账户已被别的微信绑定，请选择账号登录");
             }
         } else if (dbWechatUserByOpenid == null) {
             // 通过userId和openid都找不到微信记录，需要新增一个
@@ -85,14 +90,16 @@ public class WechatAuthService {
             loginResponse.setUserInfo(convertLoginResponse(umsAdmin, umsWechatUser));
         }
         loginResponse.setToken(token);
-        return loginResponse;
+        return CommonResult.success(loginResponse);
     }
 
     private UmsAgencyWechatUser insertWechatUser(Long userId, String openid, WechatLoginRequest loginRequest) {
         UmsAgencyWechatUser wechatUser = new UmsAgencyWechatUser();
         BeanUtil.copyProperties(loginRequest, wechatUser);
-        wechatUser.setEmpId(userId);
+        wechatUser.setUserId(userId);
         wechatUser.setOpenid(openid);
+        // 昵称设置的时候需要编码，取值的时候解码
+        wechatUser.setNickName(Base64.encode(loginRequest.getNickName(), StandardCharsets.UTF_8));
         int count = wechatUserMapper.insert(wechatUser);
         LOGGER.info("新增微信用户信息，wechatUser={}", wechatUser.toString());
         return wechatUser;
@@ -107,22 +114,17 @@ public class WechatAuthService {
      */
     public WechatLoginResponse loginByOpenid(String code) {
         JSONObject sessionKeyAndOpenId = getSessionKeyAndOpenId(code);
-        LOGGER.info("already get sessionId and openId, wechatLoginRequest={}", JSONUtil.toJsonStr(sessionKeyAndOpenId));
+        LOGGER.info("已获取sessionKey和openid：{}", JSONUtil.toJsonStr(sessionKeyAndOpenId));
 
         String sessionKey = sessionKeyAndOpenId.get("session_key", String.class);
         String openId = sessionKeyAndOpenId.get("openid", String.class);
         UmsAgencyWechatUser umsWechatUser = findByOpenid(openId);
         // 将sessionKey和openid都保存到session中
         if (umsWechatUser == null) {
-            ServletRequestAttributes servletRequest = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            assert servletRequest != null;
-            HttpSession session = (HttpSession)servletRequest.getSessionMutex();
-            session.setAttribute(WechatConfig.WECHAT_SESSION_KEY, sessionKey);
-            session.setAttribute(WechatConfig.WECHAT_OPENID, sessionKey);
             return null;
         }
         // openid有绑定的对应账号信息，生成一个token返回到前台
-        Long userId = umsWechatUser.getEmpId();
+        Long userId = umsWechatUser.getUserId();
         UmsAdmin umsAdmin = umsAdminService.getItem(userId);
         List<UmsResource> resourceList = umsAdminService.getResourceList(userId);
         UserDetails userDetails = new AdminUserDetails(umsAdmin, resourceList);
@@ -142,17 +144,15 @@ public class WechatAuthService {
         WechatUserDTO wechatUserDTO = new WechatUserDTO();
         if (wechatUser != null) {
             BeanUtil.copyProperties(wechatUser, wechatUserDTO);
-        } else {
-            wechatUserDTO.setUserId(umsAdmin.getId());
-            wechatUserDTO.setAvatarUrl(umsAdmin.getAvatarUrl());
-            wechatUserDTO.setNickName(umsAdmin.getRealName());
         }
+        wechatUserDTO.setUserId(umsAdmin.getId());
+        wechatUserDTO.setNickName(umsAdmin.getRealName());
         return wechatUserDTO;
     }
 
     private UmsAgencyWechatUser findByUserId(Long userId) {
         UmsAgencyWechatUserExample umsWechatUserExample = new UmsAgencyWechatUserExample();
-        umsWechatUserExample.createCriteria().andEmpIdEqualTo(userId);
+        umsWechatUserExample.createCriteria().andUserIdEqualTo(userId);
         List<UmsAgencyWechatUser> wechatUserList = wechatUserMapper.selectByExample(umsWechatUserExample);
         if (CollectionUtil.isEmpty(wechatUserList)) {
             return null;

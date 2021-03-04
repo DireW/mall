@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.macro.mall.bo.AdminUserDetails;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.dao.UmsAdminRoleRelationDao;
+import com.macro.mall.dao.ums.UmsAdminDAO;
 import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.dto.UpdateAdminPasswordParam;
 import com.macro.mall.dto.ums.UmsAdminDTO;
@@ -52,6 +53,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private UmsAdminMapper adminMapper;
     @Autowired
+    UmsAdminDAO umsAdminDAO;
+    @Autowired
     private UmsAdminRoleRelationMapper adminRoleRelationMapper;
     @Autowired
     private UmsAdminRoleRelationDao adminRoleRelationDao;
@@ -76,7 +79,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
-    public UmsAdmin register(UmsAdminParam umsAdminParam) {
+    public UmsAdmin register(UmsAdmin umsAdminParam) {
         UmsAdmin umsAdmin = new UmsAdmin();
         BeanUtils.copyProperties(umsAdminParam, umsAdmin);
         umsAdmin.setCreateTime(new Date());
@@ -166,6 +169,12 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             example.or(example.createCriteria().andRealNameLike("%" + keyword + "%"));
         }
         return adminMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<UmsAdminDTO> findPage(Integer pageNum, Integer pageSize, UmsAdminDTO umsAdminDTO) {
+        PageHelper.startPage(pageNum, pageSize);
+        return umsAdminDAO.findByPage(umsAdminDTO);
     }
 
     @Override

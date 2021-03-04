@@ -1,14 +1,16 @@
 package com.macro.mall.model;
 
+import cn.hutool.core.codec.Base64;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 
 public class UmsAgencyWechatUser implements Serializable {
     @ApiModelProperty(value = "主键")
     private Long id;
 
     @ApiModelProperty(value = "用户id")
-    private Long empId;
+    private Long userId;
 
     @ApiModelProperty(value = "微信openid")
     private String openid;
@@ -41,12 +43,12 @@ public class UmsAgencyWechatUser implements Serializable {
         this.id = id;
     }
 
-    public Long getEmpId() {
-        return empId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setEmpId(Long empId) {
-        this.empId = empId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getOpenid() {
@@ -112,7 +114,7 @@ public class UmsAgencyWechatUser implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", empId=").append(empId);
+        sb.append(", userId=").append(userId);
         sb.append(", openid=").append(openid);
         sb.append(", nickName=").append(nickName);
         sb.append(", avatarUrl=").append(avatarUrl);

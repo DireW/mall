@@ -3,7 +3,7 @@
 <mapper namespace="com.macro.mall.mapper.UmsAgencyWechatUserMapper">
   <resultMap id="BaseResultMap" type="com.macro.mall.model.UmsAgencyWechatUser">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="emp_id" jdbcType="BIGINT" property="empId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="openid" jdbcType="VARCHAR" property="openid" />
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, emp_id, openid, nick_name, avatar_url, gender, city, country, province
+    id, user_id, openid, nick_name, avatar_url, gender, city, country, province
   </sql>
   <select id="selectByExample" parameterType="com.macro.mall.model.UmsAgencyWechatUserExample" resultMap="BaseResultMap">
     select
@@ -107,10 +107,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into ums_agency_wechat_user (emp_id, openid, nick_name, 
+    insert into ums_agency_wechat_user (user_id, openid, nick_name, 
       avatar_url, gender, city, 
       country, province)
-    values (#{empId,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
+    values (#{userId,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
       #{avatarUrl,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, 
       #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR})
   </insert>
@@ -120,8 +120,8 @@
     </selectKey>
     insert into ums_agency_wechat_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="empId != null">
-        emp_id,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="openid != null">
         openid,
@@ -146,8 +146,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="empId != null">
-        #{empId,jdbcType=BIGINT},
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="openid != null">
         #{openid,jdbcType=VARCHAR},
@@ -184,8 +184,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.empId != null">
-        emp_id = #{record.empId,jdbcType=BIGINT},
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
       <if test="record.openid != null">
         openid = #{record.openid,jdbcType=VARCHAR},
@@ -216,7 +216,7 @@
   <update id="updateByExample" parameterType="map">
     update ums_agency_wechat_user
     set id = #{record.id,jdbcType=BIGINT},
-      emp_id = #{record.empId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
       openid = #{record.openid,jdbcType=VARCHAR},
       nick_name = #{record.nickName,jdbcType=VARCHAR},
       avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
@@ -231,8 +231,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.macro.mall.model.UmsAgencyWechatUser">
     update ums_agency_wechat_user
     <set>
-      <if test="empId != null">
-        emp_id = #{empId,jdbcType=BIGINT},
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="openid != null">
         openid = #{openid,jdbcType=VARCHAR},
@@ -260,7 +260,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.macro.mall.model.UmsAgencyWechatUser">
     update ums_agency_wechat_user
-    set emp_id = #{empId,jdbcType=BIGINT},
+    set user_id = #{userId,jdbcType=BIGINT},
       openid = #{openid,jdbcType=VARCHAR},
       nick_name = #{nickName,jdbcType=VARCHAR},
       avatar_url = #{avatarUrl,jdbcType=VARCHAR},
