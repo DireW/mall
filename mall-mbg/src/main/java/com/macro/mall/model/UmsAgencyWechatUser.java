@@ -1,9 +1,7 @@
 package com.macro.mall.model;
 
-import cn.hutool.core.codec.Base64;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 public class UmsAgencyWechatUser implements Serializable {
     @ApiModelProperty(value = "主键")
