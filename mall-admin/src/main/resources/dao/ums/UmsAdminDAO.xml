@@ -3,53 +3,53 @@
 <mapper namespace="com.macro.mall.dao.ums.UmsAdminDAO">
 
     <resultMap id="umsAdminDtoResultMap" type="com.macro.mall.dto.ums.UmsAdminDTO">
-        <result column="id" jdbcType="BIGINT" property="id" />
-        <result column="username" jdbcType="VARCHAR" property="username" />
-        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
-        <result column="real_name" jdbcType="VARCHAR" property="realName" />
-        <result column="id_card" jdbcType="VARCHAR" property="idCard" />
-        <result column="gender" jdbcType="INTEGER" property="gender" />
-        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
-        <result column="email" jdbcType="VARCHAR" property="email" />
-        <result column="note" jdbcType="VARCHAR" property="note" />
-        <result column="create_time" jdbcType="DATE" property="createTime" />
-        <result column="login_time" jdbcType="DATE" property="loginTime" />
-        <result column="status" jdbcType="INTEGER" property="status" />
-        <result column="area_id" jdbcType="BIGINT" property="areaId" />
-        <result column="area_name" jdbcType="VARCHAR" property="areaName" />
-        <result column="department_idd" jdbcType="BIGINT" property="departmentId" />
-        <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-        <association property="wechatUser" resultMap="com.macro.mall.mapper.UmsAgencyWechatUserMapper.BaseResultMap" columnPrefix="wu_"/>
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl"/>
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+        <result column="login_time" jdbcType="DATE" property="loginTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="area_id" jdbcType="BIGINT" property="areaId"/>
+        <result column="area_name" jdbcType="VARCHAR" property="areaName"/>
+        <result column="department_id" jdbcType="BIGINT" property="departmentId"/>
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName"/>
+        <association property="wechatUser" resultMap="com.macro.mall.mapper.UmsAgencyWechatUserMapper.BaseResultMap"
+                     columnPrefix="wu_"/>
     </resultMap>
 
     <select id="findByPage" resultMap="umsAdminDtoResultMap">
         SELECT
-            admin.*,
-            dept.id AS department_id,
-            dept. NAME AS department_name,
-            dept.area_id,
-            dept.area_name,
-            wu.id as wu_id,
-            wu.user_id as wu_user_id,
-            wu.openid as wu_openid,
-            wu.nick_name as wu_nick_name,
-            wu.avatar_url as wu_avatar_url,
-            wu.gender as wu_gender,
-            wu.city as wu_city,
-            wu.country as wu_country,
-            wu.province as wu_province
+        admin.*,
+        dept. NAME AS department_name,
+        dept.area_id,
+        dept.area_name,
+        wu.id as wu_id,
+        wu.user_id as wu_user_id,
+        wu.openid as wu_openid,
+        wu.nick_name as wu_nick_name,
+        wu.avatar_url as wu_avatar_url,
+        wu.gender as wu_gender,
+        wu.city as wu_city,
+        wu.country as wu_country,
+        wu.province as wu_province
         FROM
-            ums_admin admin
+        ums_admin admin
         LEFT JOIN (
-            SELECT
-                d.*, a. NAME AS area_name
-            FROM
-                ums_agency_department d
-            LEFT JOIN ums_agency_area a ON d.area_id = a.id
+        SELECT
+        d.*, a. NAME AS area_name
+        FROM
+        ums_agency_department d
+        LEFT JOIN ums_agency_area a ON d.area_id = a.id
         ) dept ON admin.department_id = dept.id
         LEFT JOIN ums_agency_wechat_user wu ON admin.id = wu.user_id
         WHERE
-            1 = 1
+        1 = 1
         <if test="queryParam.departmentId != null">
             AND dept.id = #{queryParam.departmentId}
         </if>
@@ -58,5 +58,35 @@
         </if>
         ORDER BY admin.create_time desc
     </select>
+
+    <select id="findById" resultMap="umsAdminDtoResultMap">
+        SELECT
+        admin.*,
+        dept. NAME AS department_name,
+        dept.area_id,
+        dept.area_name,
+        wu.id as wu_id,
+        wu.user_id as wu_user_id,
+        wu.openid as wu_openid,
+        wu.nick_name as wu_nick_name,
+        wu.avatar_url as wu_avatar_url,
+        wu.gender as wu_gender,
+        wu.city as wu_city,
+        wu.country as wu_country,
+        wu.province as wu_province
+        FROM
+        ums_admin admin
+        LEFT JOIN (
+        SELECT
+        d.*, a. NAME AS area_name
+        FROM
+        ums_agency_department d
+        LEFT JOIN ums_agency_area a ON d.area_id = a.id
+        ) dept ON admin.department_id = dept.id
+        LEFT JOIN ums_agency_wechat_user wu ON admin.id = wu.user_id
+        WHERE
+        admin.id = #{id}
+    </select>
+
 
 </mapper>

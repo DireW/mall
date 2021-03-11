@@ -16,7 +16,7 @@ mybatis:
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
   secret: mall-admin-secret #JWT加解密使用的密钥
-  expiration: 259200  #JWT的超期限时间(60*60*24*3)
+  expiration: 864000  #JWT的超期限时间(60*60*24*10)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
 
 redis:

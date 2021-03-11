@@ -29,6 +29,10 @@ public class ProcessService {
         return processMapper.selectByExampleWithBLOBs(example);
     }
 
+    public OmsProcess findById(Long id) {
+        return processMapper.selectByPrimaryKey(id);
+    }
+
     /**
      * 排序加到最后面一个
      *

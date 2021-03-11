@@ -14,4 +14,6 @@ public interface UmsAdminDAO {
 
     List<UmsAdminDTO> findByPage(@Param("queryParam") UmsAdminDTO umsAdminDTO);
 
+    UmsAdminDTO findById(@Param("id") Long id);
+
 }

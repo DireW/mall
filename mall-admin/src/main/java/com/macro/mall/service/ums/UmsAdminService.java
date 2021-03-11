@@ -45,6 +45,8 @@ public interface UmsAdminService {
      */
     UmsAdmin getItem(Long id);
 
+    UmsAdminDTO getFullInfo(Long id);
+
     /**
      * 根据用户名或昵称分页查询用户
      */

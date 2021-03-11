@@ -121,6 +121,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return token;
     }
 
+    @Override
+    public UmsAdminDTO getFullInfo(Long id) {
+        return umsAdminDAO.findById(id);
+    }
+
     /**
      * 添加登录记录
      *

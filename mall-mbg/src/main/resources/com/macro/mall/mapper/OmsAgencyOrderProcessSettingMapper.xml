@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.macro.mall.mapper.OmsAgencyOrderProcessSettingMapper">
+  <resultMap id="BaseResultMap" type="com.macro.mall.model.OmsAgencyOrderProcessSetting">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_process_id" jdbcType="BIGINT" property="orderProcessId" />
+    <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+    <result column="field_cn_name" jdbcType="VARCHAR" property="fieldCnName" />
+    <result column="field_value" jdbcType="VARCHAR" property="fieldValue" />
+    <result column="field_type" jdbcType="INTEGER" property="fieldType" />
+    <result column="enum_array_json" jdbcType="VARCHAR" property="enumArrayJson" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, order_id, order_process_id, field_name, field_cn_name, field_value, field_type, 
+    enum_array_json, deleted, created_time, updated_time
+  </sql>
+  <select id="selectByExample" parameterType="com.macro.mall.model.OmsAgencyOrderProcessSettingExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oms_agency_order_process_setting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oms_agency_order_process_setting
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from oms_agency_order_process_setting
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.macro.mall.model.OmsAgencyOrderProcessSettingExample">
+    delete from oms_agency_order_process_setting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.macro.mall.model.OmsAgencyOrderProcessSetting">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oms_agency_order_process_setting (order_id, order_process_id, field_name, 
+      field_cn_name, field_value, field_type, 
+      enum_array_json, deleted, created_time, 
+      updated_time)
+    values (#{orderId,jdbcType=BIGINT}, #{orderProcessId,jdbcType=BIGINT}, #{fieldName,jdbcType=VARCHAR}, 
+      #{fieldCnName,jdbcType=VARCHAR}, #{fieldValue,jdbcType=VARCHAR}, #{fieldType,jdbcType=INTEGER}, 
+      #{enumArrayJson,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.macro.mall.model.OmsAgencyOrderProcessSetting">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oms_agency_order_process_setting
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderProcessId != null">
+        order_process_id,
+      </if>
+      <if test="fieldName != null">
+        field_name,
+      </if>
+      <if test="fieldCnName != null">
+        field_cn_name,
+      </if>
+      <if test="fieldValue != null">
+        field_value,
+      </if>
+      <if test="fieldType != null">
+        field_type,
+      </if>
+      <if test="enumArrayJson != null">
+        enum_array_json,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="orderProcessId != null">
+        #{orderProcessId,jdbcType=BIGINT},
+      </if>
+      <if test="fieldName != null">
+        #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldCnName != null">
+        #{fieldCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldValue != null">
+        #{fieldValue,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldType != null">
+        #{fieldType,jdbcType=INTEGER},
+      </if>
+      <if test="enumArrayJson != null">
+        #{enumArrayJson,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.macro.mall.model.OmsAgencyOrderProcessSettingExample" resultType="java.lang.Long">
+    select count(*) from oms_agency_order_process_setting
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oms_agency_order_process_setting
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=BIGINT},
+      </if>
+      <if test="record.orderProcessId != null">
+        order_process_id = #{record.orderProcessId,jdbcType=BIGINT},
+      </if>
+      <if test="record.fieldName != null">
+        field_name = #{record.fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldCnName != null">
+        field_cn_name = #{record.fieldCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldValue != null">
+        field_value = #{record.fieldValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldType != null">
+        field_type = #{record.fieldType,jdbcType=INTEGER},
+      </if>
+      <if test="record.enumArrayJson != null">
+        enum_array_json = #{record.enumArrayJson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleted != null">
+        deleted = #{record.deleted,jdbcType=BIT},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null">
+        updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oms_agency_order_process_setting
+    set id = #{record.id,jdbcType=BIGINT},
+      order_id = #{record.orderId,jdbcType=BIGINT},
+      order_process_id = #{record.orderProcessId,jdbcType=BIGINT},
+      field_name = #{record.fieldName,jdbcType=VARCHAR},
+      field_cn_name = #{record.fieldCnName,jdbcType=VARCHAR},
+      field_value = #{record.fieldValue,jdbcType=VARCHAR},
+      field_type = #{record.fieldType,jdbcType=INTEGER},
+      enum_array_json = #{record.enumArrayJson,jdbcType=VARCHAR},
+      deleted = #{record.deleted,jdbcType=BIT},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.macro.mall.model.OmsAgencyOrderProcessSetting">
+    update oms_agency_order_process_setting
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="orderProcessId != null">
+        order_process_id = #{orderProcessId,jdbcType=BIGINT},
+      </if>
+      <if test="fieldName != null">
+        field_name = #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldCnName != null">
+        field_cn_name = #{fieldCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldValue != null">
+        field_value = #{fieldValue,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldType != null">
+        field_type = #{fieldType,jdbcType=INTEGER},
+      </if>
+      <if test="enumArrayJson != null">
+        enum_array_json = #{enumArrayJson,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.macro.mall.model.OmsAgencyOrderProcessSetting">
+    update oms_agency_order_process_setting
+    set order_id = #{orderId,jdbcType=BIGINT},
+      order_process_id = #{orderProcessId,jdbcType=BIGINT},
+      field_name = #{fieldName,jdbcType=VARCHAR},
+      field_cn_name = #{fieldCnName,jdbcType=VARCHAR},
+      field_value = #{fieldValue,jdbcType=VARCHAR},
+      field_type = #{fieldType,jdbcType=INTEGER},
+      enum_array_json = #{enumArrayJson,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=BIT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
